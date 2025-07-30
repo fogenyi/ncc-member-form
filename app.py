@@ -31,19 +31,32 @@ def admin():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    data = request.form
-    interests = request.form.getlist('volunteer_interests')
-    conn = sqlite3.connect('ncc_members.db')
-    c = conn.cursor()
-    c.execute('''INSERT INTO members (first_name, last_name, birth_month, birth_day, birth_year,
-              address, phone, family_members, communication, volunteer_interests, comments)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-              (data['first_name'], data['last_name'], data['birth_month'], data['birth_day'], data['birth_year'],
-               data['address'], data['phone'], data['family_members'], data['communication'],
-               ', '.join(interests), data['comments']))
-    conn.commit()
-    conn.close()
-    return redirect('/thank-you')
+    try:
+        data = request.form
+        interests = request.form.getlist('volunteer_interests')
+        conn = sqlite3.connect('ncc_members.db')
+        c = conn.cursor()
+        c.execute('''INSERT INTO members (
+            first_name, last_name, birth_month, birth_day, birth_year,
+            address, phone, family_members, communication, volunteer_interests, comments
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (
+            data.get('first_name', ''),
+            data.get('last_name', ''),
+            data.get('birth_month', ''),
+            data.get('birth_day', ''),
+            data.get('birth_year', ''),
+            data.get('address', ''),
+            data.get('phone', ''),
+            data.get('family_members', ''),
+            data.get('communication', ''),
+            ', '.join(interests),
+            data.get('comments', '')
+        ))
+        conn.commit()
+        conn.close()
+        return redirect('/thank-you')
+    except Exception as e:
+        return f"Something went wrong: {e}", 500
 
 def check_auth(username, password):
     return username == 'admin' and password == 'MySecret123'
