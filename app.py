@@ -17,6 +17,9 @@ def init_db():
     conn.commit()
     conn.close()
 
+# Ensure DB initializes in all environments (including Render)
+init_db()
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -86,5 +89,4 @@ def export():
     return send_file(file_path, as_attachment=True)
 
 if __name__ == '__main__':
-    init_db()
     app.run(host='0.0.0.0', port=8000)
