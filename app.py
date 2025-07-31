@@ -17,7 +17,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Ensure DB initializes in all environments (including Render)
 init_db()
 
 @app.route('/')
