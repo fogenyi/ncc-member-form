@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NCC Member Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d0f0c0; /* Green background */
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+            color: #333; /* Text color for better contrast */
+        }
+        h1 {
+            color: #2a7f2a; /* Darker green for headings */
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .checkbox-group label {
+            font-weight: normal;
+        }
+        button {
+            background-color: #2a7f2a; /* Darker green for the button */
+            color: white;
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #217f21; /* Slightly darker green for hover effect */
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to NCC Member Registration</h1>
+    <form action="/submit" method="post">
+        <label>First Name: <input type="text" name="first_name" required></label>
+        <label>Last Name: <input type="text" name="last_name" required></label>
+        <label>Birth Month:
+            <select name="birth_month">
+                <option value="">--Select--</option>
+                <option>January</option><option>February</option><option>March</option><option>April</option>
+                <option>May</option><option>June</option><option>July</option><option>August</option>
+                <option>September</option><option>October</option><option>November</option><option>December</option>
+            </select>
+        </label>
+        <label>Birth Day:
+            <select name="birth_day"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option></select>
+        </label>
+        <label>Birth Year (Optional): <input type="text" name="birth_year"></label>
+        <label>House Address: <input type="text" name="address"></label>
+        <label>Phone Number: <input type="text" name="phone"></label>
+        <label>Family Members (Optional): <input type="text" name="family_members"></label>
+        <label>Preferred Mode of Communication:
+            <select name="communication">
+                <option>Email</option><option>WhatsApp</option><option>Phone Call</option><option>Text Message</option>
+            </select>
+        </label>
+        <label>Volunteer Interests:</label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="volunteer_interests" value="Choir"> Choir</label>
+            <label><input type="checkbox" name="volunteer_interests" value="Bible Study"> Bible Study</label>
+            <label><input type="checkbox" name="volunteer_interests" value="Youth Ministry"> Youth Ministry</label>
+            <label><input type="checkbox" name="volunteer_interests" value="Usher/Hospitality"> Usher/Hospitality</label>
+            <label><input type="checkbox" name="volunteer_interests" value="Children's Liturgy"> Children's Liturgy</label>
+            <label><input type="checkbox" name="volunteer_interests" value="Refreshment Coordination"> Refreshment Coordination</label>
+            <label><input type="checkbox" name="volunteer_interests" value="Outreach/Evangelization"> Outreach/Evangelization</label>
+            <label><input type="checkbox" name="volunteer_interests" value="Others"> Others</label>
+        </div>
+        <label>Comments or Suggestions:</label>
+        <textarea name="comments" rows="4"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    <p><a href="/admin">Admin Page</a></p>
+</body>
+</html>
