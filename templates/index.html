@@ -11,6 +11,7 @@
             margin: auto;
             padding: 20px;
             color: #333; /* Text color for better contrast */
+            position: relative; /* To position the bottom logo */
         }
         h1 {
             color: #2a7f2a; /* Darker green for headings */
@@ -44,10 +45,29 @@
         button:hover {
             background-color: #217f21; /* Slightly darker green for hover effect */
         }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 200px; /* Adjust as needed */
+        }
+        .bottom-logo {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     </style>
 </head>
 <body>
+    <!-- Top Center Logo -->
+    <div class="logo">
+        <img src="{{ url_for('static', filename='ncc_logo.png') }}" alt="NCC Logo">
+    </div>
+
     <h1>Welcome to NCC Member Registration</h1>
+
     <form action="/submit" method="post">
         <label>First Name: <input type="text" name="first_name" required></label>
         <label>Last Name: <input type="text" name="last_name" required></label>
@@ -74,19 +94,25 @@
         <label>Volunteer Interests:</label>
         <div class="checkbox-group">
             <label><input type="checkbox" name="volunteer_interests" value="Choir"> Choir</label>
-            <label><input type="checkbox" name="volunteer_interests" value="Lay Readers"> Lay Readers</label>
             <label><input type="checkbox" name="volunteer_interests" value="Bible Study"> Bible Study</label>
             <label><input type="checkbox" name="volunteer_interests" value="Youth Ministry"> Youth Ministry</label>
             <label><input type="checkbox" name="volunteer_interests" value="Usher/Hospitality"> Usher/Hospitality</label>
             <label><input type="checkbox" name="volunteer_interests" value="Children's Liturgy"> Children's Liturgy</label>
             <label><input type="checkbox" name="volunteer_interests" value="Refreshment Coordination"> Refreshment Coordination</label>
             <label><input type="checkbox" name="volunteer_interests" value="Outreach/Evangelization"> Outreach/Evangelization</label>
+            <label><input type="checkbox" name="volunteer_interests" value="Lay Readers"> Lay Readers</label> <!-- New checkbox added here -->
             <label><input type="checkbox" name="volunteer_interests" value="Others"> Others</label>
         </div>
         <label>Comments or Suggestions:</label>
         <textarea name="comments" rows="4"></textarea>
         <button type="submit">Submit</button>
     </form>
+
     <p><a href="/admin">Admin Page</a></p>
+
+    <!-- Bottom Center Logo -->
+    <div class="bottom-logo">
+        <img src="{{ url_for('static', filename='ncc_logo.png') }}" alt="NCC Logo">
+    </div>
 </body>
 </html>
