@@ -61,7 +61,7 @@ def submit():
         return f"Something went wrong: {e}", 500
 
 def check_auth(username, password):
-    return username == 'admin' and password == '2Uh0tOO7&'
+    return username == 'Nc_adm127in' and password == '2Uh0tOO7&'
 
 def authenticate():
     return Response(
