@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>NCC Member Registration</title>
     <style>
         body {
@@ -10,17 +10,12 @@
             max-width: 700px;
             margin: auto;
             padding: 20px;
-            color: #333; /* Text color for better contrast */
-            position: relative; /* To position the bottom logo */
+            color: #333;
         }
         h1 { color: #2a7f2a; }
         label { display: block; margin-top: 10px; font-weight: bold; }
-        input, select, textarea {
-            width: 100%; padding: 8px; margin-top: 5px;
-        }
-        .checkbox-group {
-            display: flex; flex-wrap: wrap; gap: 10px;
-        }
+        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
         .checkbox-group label { font-weight: normal; }
         button {
             background-color: #2a7f2a; color: white; margin-top: 20px;
@@ -33,7 +28,7 @@
         /* Family Member Rows */
         .fam-row {
             display: grid;
-            grid-template-columns: 2fr 1.2fr 1fr 1.2fr auto;
+            grid-template-columns: 1.6fr 1.1fr 0.9fr 1.1fr 1.2fr 1.6fr auto;
             gap: 8px;
             align-items: end;
             margin-top: 8px;
@@ -50,6 +45,7 @@
             cursor: pointer;
             border-radius: 6px;
         }
+
         #addFamilyBtn {
             background-color: #2a7f2a;
             color: white;
@@ -61,11 +57,16 @@
         }
         #addFamilyBtn:hover { background-color: #217f21; }
 
-        .bottom-logo {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+        /* ✅ New Footer Logo (Option B) */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.85;
+        }
+        .footer-logo {
+            width: 60px;
+            height: auto;
+            display: inline-block;
         }
     </style>
 </head>
@@ -142,9 +143,10 @@
 
     <p><a href="/admin">Admin Page</a></p>
 
-    <!-- Bottom Center Logo -->
-    <div class="bottom-logo">
-        <img src="static/ncc_logo.png" alt="NCC Logo">
+    <!-- ✅ Replaced Bottom Logo with Cleaner Footer (Option B) -->
+    <div class="footer">
+        <img src="static/ncc_logo.png" alt="NCC Logo" class="footer-logo">
+        <div>Nigerian Catholic Community – Bowmanville</div>
     </div>
 
     <!-- FAMILY MEMBER SCRIPT -->
@@ -185,6 +187,42 @@
         return inp;
       }
 
+      // Relationship dropdown (alphabetical order)
+      function createRelationshipSelect() {
+        const sel = document.createElement('select');
+        sel.name = 'fam_relationship';
+        sel.innerHTML = [
+          '<option value="">--Relationship--</option>',
+          '<option>Daughter</option>',
+          '<option>Father</option>',
+          '<option>Husband</option>',
+          '<option>Mother</option>',
+          '<option>Relative</option>',
+          '<option>Son</option>',
+          '<option>Wife</option>'
+        ].join('');
+        return sel;
+      }
+
+      // Volunteer dropdown (optional)
+      function createVolunteerSelect() {
+        const sel = document.createElement('select');
+        sel.name = 'fam_volunteer';
+        sel.innerHTML = [
+          '<option value="">--Volunteer Interest (Optional)--</option>',
+          '<option>Choir</option>',
+          '<option>Bible Study</option>',
+          '<option>Youth Ministry</option>',
+          '<option>Usher/Hospitality</option>',
+          '<option>Children\'s Liturgy</option>',
+          '<option>Refreshment Coordination</option>',
+          '<option>Outreach/Evangelization</option>',
+          '<option>Lay Readers</option>',
+          '<option>Others</option>'
+        ].join('');
+        return sel;
+      }
+
       function addRow(prefill = {}) {
         const row = document.createElement('div');
         row.className = 'fam-row';
@@ -216,6 +254,18 @@
         if (prefill.birth_year) yearInp.value = prefill.birth_year;
         yearLabel.appendChild(yearInp);
 
+        const relLabel = document.createElement('label');
+        relLabel.textContent = 'Relationship';
+        const relSel = createRelationshipSelect();
+        if (prefill.relationship) relSel.value = prefill.relationship;
+        relLabel.appendChild(relSel);
+
+        const volLabel = document.createElement('label');
+        volLabel.textContent = 'Volunteer';
+        const volSel = createVolunteerSelect();
+        if (prefill.volunteer) volSel.value = prefill.volunteer;
+        volLabel.appendChild(volSel);
+
         const removeBtn = document.createElement('button');
         removeBtn.type = 'button';
         removeBtn.className = 'fam-remove';
@@ -226,12 +276,16 @@
         row.appendChild(monthLabel);
         row.appendChild(dayLabel);
         row.appendChild(yearLabel);
+        row.appendChild(relLabel);
+        row.appendChild(volLabel);   /* NEW volunteer dropdown */
         row.appendChild(removeBtn);
+
         familyContainer.appendChild(row);
       }
 
       addBtn.addEventListener('click', () => addRow());
 
+      // Serialize to JSON on submit
       form.addEventListener('submit', () => {
         const rows = familyContainer.querySelectorAll('.fam-row');
         const members = [];
@@ -240,10 +294,16 @@
           const birth_month = row.querySelector('select[name="fam_birth_month"]')?.value || '';
           const birth_day = row.querySelector('select[name="fam_birth_day"]')?.value || '';
           const birth_year = row.querySelector('input[name="fam_birth_year"]')?.value || '';
-          if (!name && !birth_month && !birth_day && !birth_year) return;
-          members.push({ name, birth_month, birth_day, birth_year });
+          const relationship = row.querySelector('select[name="fam_relationship"]')?.value || '';
+          const volunteer = row.querySelector('select[name="fam_volunteer"]')?.value || ''; // optional
+
+          // Ignore completely empty rows
+          if (!name && !birth_month && !birth_day && !birth_year && !relationship && !volunteer) return;
+
+          members.push({ name, birth_month, birth_day, birth_year, relationship, volunteer });
         });
-        output.value = JSON.stringify(members);
+
+        output.value = JSON.stringify(members); // goes into request.form['family_members']
       });
     })();
     </script>
