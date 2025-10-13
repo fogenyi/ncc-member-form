@@ -11,7 +11,7 @@ def init_db():
     c.execute('''CREATE TABLE IF NOT EXISTS members (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         first_name TEXT, last_name TEXT, birth_month TEXT, birth_day TEXT, birth_year TEXT,
-        address TEXT, phone TEXT, family_members TEXT,
+        address TEXT, phone TEXT, email TEXT, family_members TEXT,
         communication TEXT, volunteer_interests TEXT, comments TEXT
     )''')
     conn.commit()
@@ -40,7 +40,7 @@ def submit():
         c = conn.cursor()
         c.execute('''INSERT INTO members (
             first_name, last_name, birth_month, birth_day, birth_year,
-            address, phone, family_members, communication, volunteer_interests, comments
+            address, phone, email, family_members, communication, volunteer_interests, comments
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (
             data.get('first_name', ''),
             data.get('last_name', ''),
@@ -49,6 +49,7 @@ def submit():
             data.get('birth_year', ''),
             data.get('address', ''),
             data.get('phone', ''),
+            data.get('email', ''),
             data.get('family_members', ''),
             data.get('communication', ''),
             ', '.join(interests),
