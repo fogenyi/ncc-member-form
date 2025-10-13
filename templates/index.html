@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>NCC Member Registration</title>
     <style>
         body {
@@ -10,48 +10,53 @@
             max-width: 700px;
             margin: auto;
             padding: 20px;
-            color: #333; /* Text color for better contrast */
-            position: relative; /* To position the bottom logo */
+            color: #333;
+            position: relative; /* For bottom logo positioning */
         }
-        h1 {
-            color: #2a7f2a; /* Darker green for headings */
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-        }
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .checkbox-group label {
-            font-weight: normal;
-        }
+        h1 { color: #2a7f2a; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .checkbox-group label { font-weight: normal; }
         button {
-            background-color: #2a7f2a; /* Darker green for the button */
+            background-color: #2a7f2a; color: white; margin-top: 20px;
+            padding: 10px 20px; border: none; cursor: pointer;
+        }
+        button:hover { background-color: #217f21; }
+        .logo { text-align: center; margin-bottom: 20px; }
+        .logo img { max-width: 60px; }
+
+        /* Family Member Rows (Name, Month, Day, Year, Relationship, Volunteer, Remove) */
+        .fam-row {
+            display: grid;
+            grid-template-columns: 1.6fr 1.1fr 0.9fr 1.1fr 1.2fr 1.6fr auto;
+            gap: 8px;
+            align-items: end;
+            margin-top: 8px;
+            background: #f4fff4;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .fam-row label { margin-top: 0; }
+        .fam-remove {
+            background: #b22222;
+            color: #fff;
+            border: none;
+            padding: 8px 10px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        #addFamilyBtn {
+            background-color: #2a7f2a;
             color: white;
-            margin-top: 20px;
-            padding: 10px 20px;
+            margin-top: 10px;
+            padding: 8px 14px;
             border: none;
             cursor: pointer;
+            border-radius: 6px;
         }
-        button:hover {
-            background-color: #217f21; /* Slightly darker green for hover effect */
-        }
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo img {
-            max-width: 150px; /* Adjust as needed */
-        }
+        #addFamilyBtn:hover { background-color: #217f21; }
+
         .bottom-logo {
             position: absolute;
             bottom: 20px;
@@ -61,6 +66,7 @@
     </style>
 </head>
 <body>
+
     <!-- Top Center Logo -->
     <div class="logo">
         <img src="static/ncc_logo.png" alt="NCC Logo">
@@ -69,8 +75,10 @@
     <h1>Welcome to NCC Member Registration</h1>
 
     <form action="/submit" method="post">
+
         <label>First Name: <input type="text" name="first_name" required></label>
         <label>Last Name: <input type="text" name="last_name" required></label>
+
         <label>Birth Month:
             <select name="birth_month">
                 <option value="">--Select--</option>
@@ -79,19 +87,36 @@
                 <option>September</option><option>October</option><option>November</option><option>December</option>
             </select>
         </label>
+
         <label>Birth Day:
-            <select name="birth_day"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option></select>
+            <select name="birth_day">
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+                <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+                <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
+                <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+                <option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
+                <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option>
+            </select>
         </label>
+
         <label>Birth Year (Optional): <input type="text" name="birth_year"></label>
+
         <label>House Address: <input type="text" name="address"></label>
         <label>Phone Number: <input type="text" name="phone"></label>
         <label>Email Address: <input type="email" name="email" required></label>
-        <label>Family Members (Optional): <input type="text" name="family_members"></label>
+
+        <!-- Family Member Dynamic Section -->
+        <label>Family Members (Optional):</label>
+        <div id="familyContainer"></div>
+        <button type="button" id="addFamilyBtn">+ Add Family Member</button>
+        <input type="hidden" name="family_members" id="family_members_json">
+
         <label>Preferred Mode of Communication:
             <select name="communication">
                 <option>Email</option><option>WhatsApp</option><option>Phone Call</option><option>Text Message</option>
             </select>
         </label>
+
         <label>Volunteer Interests:</label>
         <div class="checkbox-group">
             <label><input type="checkbox" name="volunteer_interests" value="Choir"> Choir</label>
@@ -101,15 +126,181 @@
             <label><input type="checkbox" name="volunteer_interests" value="Children's Liturgy"> Children's Liturgy</label>
             <label><input type="checkbox" name="volunteer_interests" value="Refreshment Coordination"> Refreshment Coordination</label>
             <label><input type="checkbox" name="volunteer_interests" value="Outreach/Evangelization"> Outreach/Evangelization</label>
-            <label><input type="checkbox" name="volunteer_interests" value="Lay Readers"> Lay Readers</label> <!-- New checkbox added here -->
+            <label><input type="checkbox" name="volunteer_interests" value="Lay Readers"> Lay Readers</label>
             <label><input type="checkbox" name="volunteer_interests" value="Others"> Others</label>
         </div>
+
         <label>Comments or Suggestions:</label>
         <textarea name="comments" rows="4"></textarea>
+
         <button type="submit">Submit</button>
     </form>
 
     <p><a href="/admin">Admin Page</a></p>
+
+    <!-- Bottom Center Logo -->
+    <div class="bottom-logo">
+        <img src="static/ncc_logo.png" alt="NCC Logo">
+    </div>
+
+    <!-- FAMILY MEMBER SCRIPT -->
+    <script>
+    (function () {
+      const familyContainer = document.getElementById('familyContainer');
+      const addBtn = document.getElementById('addFamilyBtn');
+      const form = document.querySelector('form[action="/submit"]');
+      const output = document.getElementById('family_members_json');
+
+      const months = ["", "January","February","March","April","May","June",
+                      "July","August","September","October","November","December"];
+
+      function createMonthSelect() {
+        const sel = document.createElement('select');
+        sel.name = 'fam_birth_month';
+        sel.innerHTML = months.map((m,i) =>
+          `<option value="${m}">${i===0?'--Select--':m}</option>`
+        ).join('');
+        return sel;
+      }
+
+      function createDaySelect() {
+        const sel = document.createElement('select');
+        sel.name = 'fam_birth_day';
+        sel.innerHTML = ['--Select--', ...Array.from({length:31},(_,i)=>String(i+1))]
+          .map(v => `<option value="${v==='--Select--' ? '' : v}">${v}</option>`).join('');
+        return sel;
+      }
+
+      function createYearInput() {
+        const inp = document.createElement('input');
+        inp.type = 'number';
+        inp.name = 'fam_birth_year';
+        inp.placeholder = 'Year (optional)';
+        inp.min = '1900';
+        inp.max = new Date().getFullYear();
+        return inp;
+      }
+
+      // Relationship dropdown (alphabetical order)
+      function createRelationshipSelect() {
+        const sel = document.createElement('select');
+        sel.name = 'fam_relationship';
+        sel.innerHTML = [
+          '<option value="">--Relationship--</option>',
+          '<option>Daughter</option>',
+          '<option>Father</option>',
+          '<option>Husband</option>',
+          '<option>Mother</option>',
+          '<option>Relative</option>',
+          '<option>Son</option>',
+          '<option>Wife</option>'
+        ].join('');
+        return sel;
+      }
+
+      // Volunteer dropdown (optional)
+      function createVolunteerSelect() {
+        const sel = document.createElement('select');
+        sel.name = 'fam_volunteer';
+        sel.innerHTML = [
+          '<option value="">--Volunteer Interest (Optional)--</option>',
+          '<option>Choir</option>',
+          '<option>Bible Study</option>',
+          '<option>Youth Ministry</option>',
+          '<option>Usher/Hospitality</option>',
+          '<option>Children\'s Liturgy</option>',
+          '<option>Refreshment Coordination</option>',
+          '<option>Outreach/Evangelization</option>',
+          '<option>Lay Readers</option>',
+          '<option>Others</option>'
+        ].join('');
+        return sel;
+      }
+
+      function addRow(prefill = {}) {
+        const row = document.createElement('div');
+        row.className = 'fam-row';
+
+        const nameLabel = document.createElement('label');
+        nameLabel.textContent = 'Name';
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.name = 'fam_name';
+        nameInput.placeholder = 'e.g., Mary Okafor';
+        nameInput.value = prefill.name || '';
+        nameLabel.appendChild(nameInput);
+
+        const monthLabel = document.createElement('label');
+        monthLabel.textContent = 'Birth Month';
+        const monthSel = createMonthSelect();
+        if (prefill.birth_month) monthSel.value = prefill.birth_month;
+        monthLabel.appendChild(monthSel);
+
+        const dayLabel = document.createElement('label');
+        dayLabel.textContent = 'Day';
+        const daySel = createDaySelect();
+        if (prefill.birth_day) daySel.value = prefill.birth_day;
+        dayLabel.appendChild(daySel);
+
+        const yearLabel = document.createElement('label');
+        yearLabel.textContent = 'Year';
+        const yearInp = createYearInput();
+        if (prefill.birth_year) yearInp.value = prefill.birth_year;
+        yearLabel.appendChild(yearInp);
+
+        const relLabel = document.createElement('label');
+        relLabel.textContent = 'Relationship';
+        const relSel = createRelationshipSelect();
+        if (prefill.relationship) relSel.value = prefill.relationship;
+        relLabel.appendChild(relSel);
+
+        const volLabel = document.createElement('label');
+        volLabel.textContent = 'Volunteer';
+        const volSel = createVolunteerSelect();
+        if (prefill.volunteer) volSel.value = prefill.volunteer;
+        volLabel.appendChild(volSel);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'fam-remove';
+        removeBtn.textContent = 'Remove';
+        removeBtn.addEventListener('click', () => row.remove());
+
+        row.appendChild(nameLabel);
+        row.appendChild(monthLabel);
+        row.appendChild(dayLabel);
+        row.appendChild(yearLabel);
+        row.appendChild(relLabel);
+        row.appendChild(volLabel);   /* NEW volunteer dropdown */
+        row.appendChild(removeBtn);
+
+        familyContainer.appendChild(row);
+      }
+
+      addBtn.addEventListener('click', () => addRow());
+
+      // Serialize to JSON on submit
+      form.addEventListener('submit', () => {
+        const rows = familyContainer.querySelectorAll('.fam-row');
+        const members = [];
+        rows.forEach(row => {
+          const name = row.querySelector('input[name="fam_name"]')?.value?.trim() || '';
+          const birth_month = row.querySelector('select[name="fam_birth_month"]')?.value || '';
+          const birth_day = row.querySelector('select[name="fam_birth_day"]')?.value || '';
+          const birth_year = row.querySelector('input[name="fam_birth_year"]')?.value || '';
+          const relationship = row.querySelector('select[name="fam_relationship"]')?.value || '';
+          const volunteer = row.querySelector('select[name="fam_volunteer"]')?.value || ''; // optional
+
+          // Ignore completely empty rows
+          if (!name && !birth_month && !birth_day && !birth_year && !relationship && !volunteer) return;
+
+          members.push({ name, birth_month, birth_day, birth_year, relationship, volunteer });
+        });
+
+        output.value = JSON.stringify(members); // goes into request.form['family_members']
+      });
+    })();
+    </script>
 
 </body>
 </html>
