@@ -52,7 +52,7 @@ def submit():
             data.get('email', ''),
             data.get('family_members', ''),
             data.get('communication', ''),
-            ', '.join(interests),
+            ', '.join(request.form.getlist('volunteer_interests')),
             data.get('comments', '')
         ))
         conn.commit()
